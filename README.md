@@ -49,7 +49,7 @@ The five pillars are —
 
 ## Operational Excellence
 
-### Design Priciples
+### Design Principles
 
 - Perform operations as code
 - Annotate documents
@@ -230,8 +230,12 @@ When you enable logging on a bucket, the console both enables logging on the sou
 __S3 bucket endpoints formats__ —
 1. http://bucket.s3.amazonaws.com
 2. http://bucket.s3.aws-region.amazonaws.com
-3. http://s3.amazonaws.com/bucket
-4. http://s3.aws-region.amazonaws.com/bucket
+3. http://bucket.s3-aws-region.amazonaws.com
+4. http://s3.amazonaws.com/bucket
+5. http://s3.aws-region.amazonaws.com/bucket
+6. http://s3-aws-region.amazonaws.com/bucket
+
+__Update__ — AWS will stop supporting the URL path format for buckets created after September 30, 2020. Read [this](https://aws.amazon.com/blogs/aws/amazon-s3-path-deprecation-plan-the-rest-of-the-story/) for details.
 
 __Object sizes__ —
 S3 can store objects of size 0 bytes to 5 TB.
@@ -248,7 +252,7 @@ To increase performance, we can __prefix each object name with a hash key__ alon
 
 __Increasing performance in S3__ —
 - If workload is mainly GET requests, integrate Cloudfront with S3.
-- If workload consists of PUT requests, use S3 transfer accleration.
+- If workload consists of PUT requests, use S3 transfer acceleration.
 
 In the __CORS__ configuration, the __exact URLs__ must be added, with the correct protocol, i.e. __http vs https__.
 
@@ -261,7 +265,7 @@ __S3 encryptions__ —
 
 To make sure that S3 objects are only accessible from Cloudfront, create an __Origin Access Identity (OAI) for Cloudfront__ and grant access to the objects to that OAI.
 
-We can create __event notification in S3__ to __invoke lamdba__ function.
+We can create __event notification in S3__ to __invoke lambda__ function.
 
 __Customer managed S3 encryption workflow__ —  
 Generate a data key using Customer managed CMK. Encrypt data using data key and delete data key. Store encrypted data key and data in S3 buckets. For decryption, use CMK to decrypt data key into plain text and then decrypt data using plain text data key.
@@ -271,7 +275,7 @@ AWS S3 __performance__ —
 - 3,500 requests per second to add data
 - 5,500 requests per second to retrieve data
 
-__Provisioned capacity__ should be used when we want to gurantee the availibility of fast expedited retrieval from S3 Glacier within minutes.
+__Provisioned capacity__ should be used when we want to guarantee the availability of fast expedited retrieval from S3 Glacier within minutes.
 
 For __S3 static website hosting__, the default provided __URL__ is https://bucket-name.s3-website-aws-region.amazonaws.com.
 
@@ -345,7 +349,7 @@ With __Redshift Spectrum__, we can run complex queries on __data stored in S3__.
 
 We can use __WLM in the parameter group configuration__ of Redshift to define number of query queues and how queries are routed to those queues.
 
-The memory and processor __usage by each process__ in an RDS instance can not be monitored by Cloudwatch, we have to use __RDS Enhanced Montoring__ for that. Because Cloudwatch monitors the hypervisor, not the individual instances.
+The memory and processor __usage by each process__ in an RDS instance can not be monitored by Cloudwatch, we have to use __RDS Enhanced Monitoring__ for that. Because Cloudwatch monitors the hypervisor, not the individual instances.
 
 __IAM DB authentication__ can be used with __MySQL and PostgreSQL__. With this, you don't need to use a password when you connect to a DB instance. Instead, you use an __authentication token__.
 
@@ -364,6 +368,7 @@ __EBS volume types__ —
 1. General purpose SSD. For web applications // most use cases.
 2. Provisioned IOPS SSD. For critical high performing databases.
 3. Throughput optimized HDD. For Big Data.
+4. Cold HDD. For infrequently accessed data.
 
 Also, to note, __HDDs cannot be boot volumes__.
 
@@ -383,7 +388,7 @@ __EBS volume types__ —
 - For throughput, Throughput optimized HDD.
 - For large number of transaction, i.e. IOPS, Provisioned IOPS SSD.
 
-By default, __EBS volumes are automatically replicated within their availalibilty zone__, and offers a significant high availability.
+By default, __EBS volumes are automatically replicated within their availability zone__, and offers a significant high availability.
 
 __AWS Cloudwatch Logs__ can be used to __monitor and store__ logs from EC2 instances. The instance needs __awslogs log driver__ installed to be able to send logs to CloudWatch. We don't need any database or S3 for storage.
 
@@ -442,7 +447,7 @@ EBS snapshots are more efficient and cost-effective solution compared to __disk 
 
 EBS volumes can only be attached to an EC2 instance in the __same Availability Zone__.
 
-__EBS snapshot creation__ — In usual scenarios EBS volume snapshots can be created at the same time it's in usage. But when using RAID configuraions, there are additional complexities and we should stop every IO operation and flush the cache before taking a snapshot.
+__EBS snapshot creation__ — In usual scenarios EBS volume snapshots can be created at the same time it's in usage. But when using RAID configurations, there are additional complexities and we should stop every IO operation and flush the cache before taking a snapshot.
 
 __Cloudwatch alarm actions__ can automatically start, stop or reboot EC2 instances based on alarms.
 
@@ -452,10 +457,10 @@ __Throughput optimized HDD vs Cold HDD__ — Throughput optimized is used for fr
 
 __RAID0 vs RAID1__ —
 
-- RAID1 is used for mirroring, high-availbilty and redundancy.
+- RAID1 is used for mirroring, high-availability and redundancy.
 - RAID0 is used for higher performance, it can combine multiple disk drives together.
 
-Larger EC2 instances have higher disk data throughput. This can be used in conjunction with RAID 0 to __improve EBS perfomance__.
+Larger EC2 instances have higher disk data throughput. This can be used in conjunction with RAID 0 to __improve EBS performance__.
 
 
 
@@ -495,7 +500,7 @@ Note that AMI ID is set during creation of launch configuration and cannot be mo
 
 __Default metric types for a load balancer__ —
 1. Request count per target.
-2. Average CPU utlization.
+2. Average CPU utilization.
 3. Network in.
 4. Network out.
 
@@ -516,7 +521,7 @@ ASG __Dynamic Scaling Policies__ —
 
 If you are scaling based on a utilization metric that increases or decreases proportionally to the number of instances in an Auto Scaling group, we recommend that you use target tracking scaling policies. Otherwise, we recommend that you use step scaling policies. 
 
-The ELB service does not consume an IP address, it's the nodes that cosume one IP address each.
+The ELB service does not consume an IP address, it's the nodes that consume one IP address each.
 
 __Auto-scaling__ ensures —
 - Fault tolerance
@@ -620,16 +625,16 @@ For connecting API Gateway to a set of services hosted in an __on-premise networ
 
 __API Gateway Throttling__ —
 
-- __Burst limit__ refers to the first milisecond.
+- __Burst limit__ refers to the first millisecond.
 - __Steady-state limit__ refers to an one second interval.
 
-__Throtting behaviors__ —
+__Throttling behaviors__ —
 - If an user exceeds the burst limit but not the steady-state limit, the rest of the requests are throttled over the one second steady-state interval. 
 - If an user exceeds the steady-state limit, AWS returns `429 Too Many Requests` error.
 
 When it comes to throttling settings, you can __override stage settings on an individual method__ within the stage. That is, there is an option for method level throttling to override stage level throttling.
 
-__Acess control mechanisms__ for API Gateway —
+__Access control mechanisms__ for API Gateway —
 - Resource policies
 - AWS IAM roles and policies
 - CORS or Cross-origin resource sharing
@@ -662,7 +667,7 @@ __Protect backend systems__ behind API gateway from __traffic spikes__ —
 
 # Lambda
 
-Lamdba functions __can be run within a private VPC__.
+Lambda functions __can be run within a private VPC__.
 
 Lambda can __read events from__ —
 - Amazon Kinesis
@@ -719,7 +724,7 @@ To grant __cross-account permission to a function__, we have to modify the funct
 
 The console doesn't support directly __modifying permissions in a function policy__. You have to do it from the CLI or SDK.
 
-If we run __lamdba functions inside a VPN__, they use __subnet IPs or ENIs__. There should be sufficient ones otherwise it will get throttled.
+If we run __lambda functions inside a VPN__, they use __subnet IPs or ENIs__. There should be sufficient ones otherwise it will get throttled.
 
 __ENI capacity__ = Projected peak concurrent executions * (Memory in GB / 3 GB).
 
@@ -746,7 +751,7 @@ __Lambda Retry upon Failure Behavior__ —
     - Synchronous invocation — Returns error with __status code 200__. Includes __FunctionError__ field and __X-Amz-Function-Error__ header.
     - Asynchronous invocation — __Retry twice__, then sent to __Dead Letter Queue__.
 - Poll-based and stream-based event source (Kinesis or DynamoDB) — Lambda keeps __retrying until the data expires__. The exception is __blocking__, this ensures the data are processed in order.
-- Poll-based but not stream-based event source (SQS) — On unsuccesful processing or if the function times out of the message, it is __returned to the queue__, and ready for further reprocessing after the visibility timeout period. If the function errors out, it is sent to __Dead Letter Queue__.
+- Poll-based but not stream-based event source (SQS) — On unsuccessful processing or if the function times out of the message, it is __returned to the queue__, and ready for further reprocessing after the visibility timeout period. If the function errors out, it is sent to __Dead Letter Queue__.
 
 __Lambda traffic shifting__ —
 
@@ -758,11 +763,11 @@ __Lambda traffic shifting__ —
 
 # VPC
 
-We cannot route traffic to a __NAT gateway__ or __VPC gateway__ endpoints through a __VPC peering__ connection, a __VPN connection__, or __AWS Direct Connect__. A NAT gateway or VPC gateway endpoints cannot be used by resources on the other side of these connections. Conversely, a NAT gateway // VPC gateway endpoints cannot send traffic over VPC endpoints, AWS VPN connections, Direct Connect or VPC Peering connections either.
+We cannot route traffic to a __NAT gateway__ or __VPC gateway endpoints__ through a __VPC peering__ connection, a __VPN connection__, or __AWS Direct Connect__. A NAT gateway or VPC gateway endpoints cannot be used by resources on the other side of these connections. Conversely, a NAT gateway // VPC gateway endpoints cannot send traffic over VPC endpoints, AWS VPN connections, Direct Connect or VPC Peering connections either.
 
 Every route table contains a __local route__ for communication within the VPC over IPv4. We __cannot modify or delete__ these routes.
 
-__VPC Endpoints always take precedence__ over NAT Gateways or Internet Gateways. 
+__VPC endpoints always take precedence__ over NAT Gateways or Internet Gateways. 
 
 Network ACL __rules are evaluated in order__, starting with the lowest numbered rule. As soon as a rule matches, it is applied regardless of any higher numbered rule that may contradict it.
 
@@ -785,7 +790,9 @@ __VPN connection__ // __Direct Connect__ connection route contains Target as `vg
 
 __VPN__ is established over a __Virtual Private Gateway__.
 
-AWS __VPC Endpoints support S3 and DynamoDB__. For __Amazon ECR__, we have to use __AWS PrivateLink__.
+There are two types of VPC Endpoints —  
+- __Gateway endpoints support only S3 and DynamoDB__. 
+- __Interface endpoints__ (Powered by __PrivateLink__) supports Amazon ECR and many other services.
 
 __Difference between DirectConnect and VPN__ — DirectConnect does not involve the Internet, while VPN does.
 
@@ -799,7 +806,7 @@ To setup __AWS VPN CloudHub__ —
 
 - Each regional site should have non overlapping IP prefixes.
 - BGP ASN should be unique at each site.
-- If BGP ASN are not unique, addional ALLOW-INs will be required.
+- If BGP ASN are not unique, additional ALLOW-INs will be required.
 
 The __allowed block size__ in VPC is between a /16 netmask (65,536 IP addresses) and /28 netmask (16 IP addresses).
 
@@ -871,6 +878,7 @@ __AWS Storage Gateways__—
 1. File gateway
 2. Volume gateway: Cached volumes
 3. Volume gateway: Stored volumes
+4. Tape gateway
 
 
 
@@ -896,7 +904,7 @@ We can configure __IAM policies__ that allows __access to specific tags__.
 __Connecting AWS SSO to On-Premise Active Directory__ —
 
 - __Two-way trust relationship__: __Preferred__. Users can do everything from both portals.
-- __AD connector__: SSO does not cache user credentials. Users can't reset password from SSO protal, have to do it from on-premise portal.
+- __AD connector__: SSO does not cache user credentials. Users can't reset password from SSO portal, have to do it from on-premise portal.
 
 For __two-step verification__, SSO sends __code to registered email__. It can set to be either —
 
@@ -976,7 +984,7 @@ __AWS Opsworks__ is a configuration management service for Chef and Puppet. With
 
 By default, __CloudTrail logs are encrypted__ using S3 server-side encryption (SSE). We can also choose to encrypt with AWS KMS.
 
-__Amazon ECS for Kubernets (EKS)__ exists, it's a managed service.
+__Amazon ECS for Kubernetes (EKS)__ exists, it's a managed service.
 
 Changes to __CloudTrail global service event logs__ can only be done via the CLI or the SDKs, not the console.
 
